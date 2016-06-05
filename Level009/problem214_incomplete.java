@@ -1,9 +1,9 @@
-public class problem214 {
+public class problem214_incomplete {
 
 	public static void main(String[] args) {
 		
 		// Recognize that the summation of Fn is the Euler totient function: https://en.wikipedia.org/wiki/Euler%27s_totient_function
-
+		
 		double start = System.nanoTime();
 		
 		int limit = 40000000;
@@ -24,6 +24,7 @@ public class problem214 {
 		}
 		
 
+		
 		double duration = (System.nanoTime() - start) / 1000000000;
 		System.out.println("Your code took " + duration + " seconds to execute.");
 	}
