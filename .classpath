@@ -4,8 +4,6 @@
 	<classpathentry kind="src" path="Level001"/>
 	<classpathentry kind="src" path="Level003"/>
 	<classpathentry kind="src" path="Level004"/>
-	<classpathentry kind="src" path="Level020"/>
-	<classpathentry kind="src" path="Level022"/>
 	<classpathentry kind="src" path="Level005"/>
 	<classpathentry kind="src" path="Level009"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>

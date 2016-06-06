@@ -7,47 +7,52 @@ public class problem107 {
 		
 		int sumI = 0; // Total weight of all arcs. Remember to divide by 2. The table is a mirror image along its diagonal.
 		
+		// Find sum of all arcs. Integer.MAX_VALUE is not read.
 		for (int i = 0; i < Table.length; i++){
 			for (int j = 0; j < Table.length; j++){
 				if (Table[i][j] != Integer.MAX_VALUE) sumI += Table[i][j];
 			}
 		}
-			
+		
+		// Prepare variables for Prim's
+		
 		int initial = 0; 				// Initial row.
-		int target = Table.length - 1; 	// Target number of arcs, equal to (nodes - 1).
+		int target = Table.length - 1; 	// Target number of arcs, equal to (rows - 1).
 		int count = 0; 					// Number of arcs added so far.
 		int weight = 0; 				// Total weight of MST.
 		
 		int check = Integer.MAX_VALUE; 	// Weight of the newest minimum arc.
-		int newRow = 0; 				// Latest row to check.
+		int newRow = 0; 				// Newest relevant row.
 		
-		int[] nodes = new int[Table.length]; // Array of all nodes to check.
-		nodes[0] = initial;                  // Set first node to row with minimum value.
-		int toAdd = 1;                       // Position of next node to be added to list of nodes to check.
+		int[] rows = new int[Table.length]; // Array of all rows to check.
+		rows[0] = initial;                  // Set first node to row with minimum value.
+		int toAdd = 1;                       // Position of next row to be added to list of rows to check.
 		
-		// Set all nodes apart from first one to max value to limit search. Values will be updated during Prim's.
-		for (int n = 1; n < nodes.length; n++){
-			nodes[n] = Integer.MAX_VALUE;
+		// Set all rows apart from first one to max value to limit search. Values will be updated during Prim's.
+		for (int n = 1; n < rows.length; n++){
+			rows[n] = Integer.MAX_VALUE;
 		}
 		
-		// Cancel all values in initial column.		
+		// Cancel all values in initial column. Do this by setting value to MaxValue. Effectively removes it from consideration.		
 		for (int i = 0; i < Table.length; i++){
 			Table[i][initial] = Integer.MAX_VALUE;
 		}
 		
-		// Now, run Prim's on a table.		
+		
+		// Now, run Prim's on a table.
+		
 		while (count < target){
 			
-			for (int j = 0; j < nodes.length; j++){
-				if (nodes[j] == Integer.MAX_VALUE) break; // We constructed the array so all relevant row numbers come before the first MAaxValue.
-				int[] arr = ArrayMin(Table[nodes[j]]);
+			for (int j = 0; j < rows.length; j++){
+				if (rows[j] == Integer.MAX_VALUE) break; // Array constructed so all relevant row numbers come before the first MaxValue.
+				int[] arr = ArrayMin(Table[rows[j]]);
 				if (arr[0] < check){
 					check = arr[0];
 					newRow = arr[1];
 				}
 			}
 			
-			nodes[toAdd] = newRow; 	// Add the new relevant row to the array of nodes.
+			rows[toAdd] = newRow; 	// Add the new relevant row to the array of rows.
 			toAdd ++;				// Increment the position value of the next node.
 
 			weight += check;
