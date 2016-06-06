@@ -1,3 +1,4 @@
+
 public class problem107 {
 
 	public static void main(String[] args) {
@@ -11,21 +12,8 @@ public class problem107 {
 				if (Table[i][j] != Integer.MAX_VALUE) sumI += Table[i][j];
 			}
 		}
-		
-		int min = Integer.MAX_VALUE; 	// Value of shortest arc found so far will be stored here.
-		int row = 0;					// Value of row in which shortest arc is found to be stored here.
-		
-		// This section of the code tells us where the shortest arc in the network is. It will serve as our starting point.
-		for (int i = 0; i < Table.length; i++){
-			int[] arr = ArrayMin(Table[i]);
 			
-			if (arr[0] < min){
-				min = arr[0];
-				row = arr[1];
-			}
-		}
-			
-		int initial = row; 				// Initial row.
+		int initial = 0; 				// Initial row.
 		int target = Table.length - 1; 	// Target number of arcs, equal to (nodes - 1).
 		int count = 0; 					// Number of arcs added so far.
 		int weight = 0; 				// Total weight of MST.
@@ -79,7 +67,6 @@ public class problem107 {
 		System.out.println("Total weight of " + sumI/2);
 		System.out.println("MST has weight of " + weight);
 		System.out.println("Algorithm saves " + (sumI/2 - weight));
-		System.out.println("Minimum value of " + min + " at row " + (row+1));
 		double duration = (System.nanoTime() - start) / 1000000000;
 		System.out.println("Your code took " + duration + " seconds to execute.");
 
