@@ -32,7 +32,7 @@ public class problem082 {
 		}
 		
 		Arrays.sort(Path);
-		System.out.println(Path[0]);
+		System.out.println("The shortest path from any node on the left to a node on the right is " + Path[0]);
 
 		double duration = (System.nanoTime() - start) / 1000000000;
 		System.out.println("Your code took " + duration + " seconds to execute.");

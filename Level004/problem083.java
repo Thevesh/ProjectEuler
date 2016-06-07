@@ -1,25 +1,65 @@
 
-public class problem081 {
+public class problem083 {
 
+	// This is a shortest path problem. Could have used Djikstra's or A* search algorithms.
+	// Instead, chose Bellman-Ford because it's the easiest to code, and the matrix is only 80x80.
+	// Source: https://en.wikipedia.org/wiki/Bellman%E2%80%93Ford_algorithm
+	
 	public static void main(String[] args) {
 
 		double start = System.nanoTime();
 		
-		for (int i = Matrix.length -1; i >= 0; i--) {
-			for (int j = Matrix[i].length - 1; j >= 0; j--) {
-				if (i+1 == Matrix.length && j+1 == Matrix[i].length) Matrix[i][j] = Matrix[i][j];
-				else if (i+1 == Matrix.length && j+1 < Matrix[i].length) Matrix[i][j] += Matrix[i][j+1];
-				else if (i+1 < Matrix.length && j+1 == Matrix[i].length) Matrix[i][j] += Matrix[i+1][j];
-				else Matrix[i][j] += Math.min(Matrix[i+1][j], Matrix[i][j+1]);
+		// Obtain height and width of matrix. Assuming height h and width w, Bellman-Ford's requires (mn - 1) iterations.
+		int height = Matrix.length;
+		int width = Matrix[0].length;
+		
+		// Create array to track shortest paths as we iterate through the matrix.
+		int[][] temp = new int[height][width];
+		
+		// Set initial values to *effectively* infinity. Choose MaxValue/10 to avoid issues with limits.
+		for (int x = 0; x < temp.length; x++){
+			for (int y = 0; y < temp[x].length; y++){
+				temp[x][y] = Integer.MAX_VALUE/10;
 			}
 		}
 		
-		System.out.println("The minimal sum from top left to bottom right is " + Matrix[0][0]);
-
+		// Set value of first entry to match matrix value.
+		temp[0][0] = Matrix[0][0];
+		
+		// Implement Bellman-Ford algorithm.
+		for (int loop = 0; loop < width*height ; loop++){
+			for (int i = 0; i < Matrix.length; i++){
+				for (int j = 0; j < Matrix[i].length; j++){
+					int check = Integer.MAX_VALUE/10;
+					check = Math.min(getTemp(i+1,j,temp), check);
+					check = Math.min(getTemp(i-1,j,temp), check);
+					check = Math.min(getTemp(i,j-1,temp), check);
+					check = Math.min(getTemp(i,j+1,temp), check);
+					temp[i][j] = Math.min(Matrix[i][j] + check, temp[i][j]);
+				}
+			}
+		}
+		// Minimal path obtained.
+		System.out.println("The minimal path, allowing motion in all planes, is " + temp[height-1][width-1]);
 		double duration = (System.nanoTime() - start) / 1000000000;
 		System.out.println("Your code took " + duration + " seconds to execute.");
 	}
 	
+	public static int getTemp (int x, int y, int[][] n){
+		if (x < 0 || x >= n.length || y < 0 || y >= n[x].length) return Integer.MAX_VALUE/10;
+		else return n[x][y];
+	}
+	
+	// Matrix2 is the test case. Algorithm returned 2297 on this, which is correct.
+	private static int[][] Matrix2 = {
+			{131,673,234,103,18},
+			{201,96,342,965,150},
+			{630,803,746,422,111},
+			{537,699,497,121,956},
+			{805,732,524,37,331}
+	};
+	
+
 	private static int[][] Matrix = {  
 			{4445,2697,5115,718,2209,2212,654,4348,3079,6821,7668,3276,8874,4190,3785,2752,9473,7817,9137,496,7338,3434,7152,4355,4552,7917,7827,2460,2350,691,3514,5880,3145,7633,7199,3783,5066,7487,3285,1084,8985,760,872,8609,8051,1134,9536,5750,9716,9371,7619,5617,275,9721,2997,2698,1887,8825,6372,3014,2113,7122,7050,6775,5948,2758,1219,3539,348,7989,2735,9862,1263,8089,6401,9462,3168,2758,3748,5870},
 			{1096,20,1318,7586,5167,2642,1443,5741,7621,7030,5526,4244,2348,4641,9827,2448,6918,5883,3737,300,7116,6531,567,5997,3971,6623,820,6148,3287,1874,7981,8424,7672,7575,6797,6717,1078,5008,4051,8795,5820,346,1851,6463,2117,6058,3407,8211,117,4822,1317,4377,4434,5925,8341,4800,1175,4173,690,8978,7470,1295,3799,8724,3509,9849,618,3320,7068,9633,2384,7175,544,6583,1908,9983,481,4187,9353,9377},
@@ -102,8 +142,6 @@ public class problem081 {
 			{2132,8992,8160,5782,4420,3371,3798,5054,552,5631,7546,4716,1332,6486,7892,7441,4370,6231,4579,2121,8615,1145,9391,1524,1385,2400,9437,2454,7896,7467,2928,8400,3299,4025,7458,4703,7206,6358,792,6200,725,4275,4136,7390,5984,4502,7929,5085,8176,4600,119,3568,76,9363,6943,2248,9077,9731,6213,5817,6729,4190,3092,6910,759,2682,8380,1254,9604,3011,9291,5329,9453,9746,2739,6522,3765,5634,1113,5789},
 			{5304,5499,564,2801,679,2653,1783,3608,7359,7797,3284,796,3222,437,7185,6135,8571,2778,7488,5746,678,6140,861,7750,803,9859,9918,2425,3734,2698,9005,4864,9818,6743,2475,132,9486,3825,5472,919,292,4411,7213,7699,6435,9019,6769,1388,802,2124,1345,8493,9487,8558,7061,8777,8833,2427,2238,5409,4957,8503,3171,7622,5779,6145,2417,5873,5563,5693,9574,9491,1937,7384,4563,6842,5432,2751,3406,7981},
 		};
-	
-	
 	
 
 }
